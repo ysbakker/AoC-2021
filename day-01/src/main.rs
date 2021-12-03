@@ -1,17 +1,9 @@
-use std::fs;
+use get_input;
 
 fn main() {
-    let data = get_input("./data/input");
+    let data = get_input::get_input_as_numbers("./input/day-01/input");
     println!("Part 1: {}", get_depth_increases(&data));
     println!("Part 2: {}", get_sliding_window_increases(&data));
-}
-
-fn get_input(file_path: &str) -> Vec<i16> {
-    let data = fs::read_to_string(file_path).unwrap();
-    return data
-        .split("\n")
-        .map(|x| x.parse::<i16>().unwrap())
-        .collect();
 }
 
 fn get_depth_increases(data: &Vec<i16>) -> i16 {
@@ -48,12 +40,12 @@ fn get_sliding_window_increases(data: &Vec<i16>) -> i16 {
 
 #[test]
 fn test_depthincreases() {
-    let data = get_input("./data/test");
+    let data = get_input::get_input_as_numbers("./input/day-01/test");
     assert_eq!(7, get_depth_increases(&data));
 }
 
 #[test]
 fn test_slidingwindowincreases() {
-    let data = get_input("./data/test");
+    let data = get_input::get_input_as_numbers("./input/day-01/test");
     assert_eq!(5, get_sliding_window_increases(&data));
 }

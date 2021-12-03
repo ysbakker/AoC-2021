@@ -1,0 +1,6 @@
+[workspace]
+
+members = [
+    "get_input",
+    "day-01",
+]
