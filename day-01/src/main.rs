@@ -1,5 +1,3 @@
-use get_input;
-
 fn main() {
     const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/input"));
     let data = get_input::get_input_as_numbers(INPUT);
@@ -7,7 +5,7 @@ fn main() {
     println!("Part 2: {}", get_sliding_window_increases(&data));
 }
 
-fn get_depth_increases(data: &Vec<i16>) -> i16 {
+fn get_depth_increases(data: &[i16]) -> i16 {
     let mut increases: i16 = 0;
     let mut prev: i16 = data[0];
 
@@ -18,10 +16,10 @@ fn get_depth_increases(data: &Vec<i16>) -> i16 {
         prev = *val;
     }
 
-    return increases;
+    increases
 }
 
-fn get_sliding_window_increases(data: &Vec<i16>) -> i16 {
+fn get_sliding_window_increases(data: &[i16]) -> i16 {
     let mut increases: i16 = 0;
     let mut prev: i16 = data[0] + data[1] + data[2];
 
@@ -36,7 +34,7 @@ fn get_sliding_window_increases(data: &Vec<i16>) -> i16 {
         prev = sum;
     }
 
-    return increases;
+    increases
 }
 
 #[test]
