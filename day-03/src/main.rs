@@ -1,17 +1,17 @@
 fn main() {
     const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/input"));
     let input = get_input::get_input_from_binary_as_numbers(INPUT);
-    println!(
-        "Part 1: {}",
-        find_gamma_rate(&input) * find_epsilon_rate(&input)
-    );
-    println!(
-        "Part 2: {}",
-        find_oxygen_generator_rating(&input) * find_co2_scrubber_rating(&input)
-    )
+    println!("Part 1: {}", calculate_power_consumption(&input));
+    println!("Part 2: {}", calculate_life_support_rating(&input))
 }
 
-fn find_most_common_bits(numbers: &[u32]) -> u32 {
+fn calculate_power_consumption(numbers: &[u32]) -> u32 {
+    let bits = get_max_bit_count(numbers);
+    let gamma_rate = calculate_gamma_rate(numbers);
+    (gamma_rate ^ (2u32.pow(bits) - 1)) * gamma_rate
+}
+
+fn calculate_gamma_rate(numbers: &[u32]) -> u32 {
     let bits = get_max_bit_count(numbers);
     let mut compare = 1;
     let mut result = 0;
@@ -31,42 +31,25 @@ fn find_most_common_bits(numbers: &[u32]) -> u32 {
     result
 }
 
-fn find_gamma_rate(numbers: &[u32]) -> u32 {
-    find_most_common_bits(numbers)
-}
-
-fn find_epsilon_rate(numbers: &[u32]) -> u32 {
-    let bits = get_max_bit_count(numbers);
-    let most_common = find_most_common_bits(numbers);
-    most_common ^ (2u32.pow(bits) - 1)
+fn calculate_life_support_rating(numbers: &[u32]) -> u32 {
+    find_co2_scrubber_rating(numbers) * find_oxygen_generator_rating(numbers)
 }
 
 fn find_oxygen_generator_rating(numbers: &[u32]) -> u32 {
     let bits = get_max_bit_count(numbers);
 
-    let mut compare = 2u32.pow(bits - 1);
     let mut current_numbers = numbers.to_vec();
-    for _ in 0..bits {
-        let mut numbers_with_one_in_current_index = Vec::<u32>::new();
-        let mut numbers_with_zero_in_current_index = Vec::<u32>::new();
-        for number in &current_numbers {
-            if number & compare > 0 {
-                numbers_with_one_in_current_index.push(*number)
-            } else {
-                numbers_with_zero_in_current_index.push(*number)
-            }
-        }
-
-        if numbers_with_one_in_current_index.len() >= numbers_with_zero_in_current_index.len() {
-            current_numbers = numbers_with_one_in_current_index
+    for i in 0..bits {
+        let (zeros, ones) = split_numbers_by_index(&current_numbers, i, bits);
+        if ones.len() >= zeros.len() {
+            current_numbers = ones
         } else {
-            current_numbers = numbers_with_zero_in_current_index
+            current_numbers = zeros
         }
 
         if current_numbers.len() == 1 {
             return current_numbers[0];
         }
-        compare >>= 1;
     }
     0
 }
@@ -74,31 +57,39 @@ fn find_oxygen_generator_rating(numbers: &[u32]) -> u32 {
 fn find_co2_scrubber_rating(numbers: &[u32]) -> u32 {
     let bits = get_max_bit_count(numbers);
 
-    let mut compare = 2u32.pow(bits - 1);
     let mut current_numbers = numbers.to_vec();
-    for _ in 0..bits {
-        let mut numbers_with_one_in_current_index = Vec::<u32>::new();
-        let mut numbers_with_zero_in_current_index = Vec::<u32>::new();
-        for number in &current_numbers {
-            if number & compare > 0 {
-                numbers_with_one_in_current_index.push(*number)
-            } else {
-                numbers_with_zero_in_current_index.push(*number)
-            }
-        }
-
-        if numbers_with_one_in_current_index.len() < numbers_with_zero_in_current_index.len() {
-            current_numbers = numbers_with_one_in_current_index
+    for i in 0..bits {
+        let (zeros, ones) = split_numbers_by_index(&current_numbers, i, bits);
+        if ones.len() < zeros.len() {
+            current_numbers = ones
         } else {
-            current_numbers = numbers_with_zero_in_current_index
+            current_numbers = zeros
         }
 
         if current_numbers.len() == 1 {
             return current_numbers[0];
         }
-        compare >>= 1;
     }
     0
+}
+
+/// returns `(zero_in_current_index, one_in_current_index)`
+fn split_numbers_by_index(numbers: &[u32], index: u32, bits: u32) -> (Vec<u32>, Vec<u32>) {
+    let compare = 1 << (bits - index - 1);
+    let mut numbers_with_one_in_current_index = Vec::<u32>::new();
+    let mut numbers_with_zero_in_current_index = Vec::<u32>::new();
+    for number in numbers {
+        if number & compare > 0 {
+            numbers_with_one_in_current_index.push(*number)
+        } else {
+            numbers_with_zero_in_current_index.push(*number)
+        }
+    }
+
+    (
+        numbers_with_zero_in_current_index,
+        numbers_with_one_in_current_index,
+    )
 }
 
 /// Finds the bit count of the largest value in a collection of u32.
@@ -116,19 +107,19 @@ mod tests {
     use super::*;
     const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/test"));
     #[test]
-    fn test_power_consumption() {
+    fn test_calculate_power_consumption() {
         let input = get_input::get_input_from_binary_as_numbers(INPUT);
-        assert_eq!(198, find_epsilon_rate(&input) * find_gamma_rate(&input));
+        assert_eq!(198, calculate_power_consumption(&input));
     }
     #[test]
-    fn test_find_gamma_rate() {
+    fn test_calculate_gamma_rate() {
         let input = get_input::get_input_from_binary_as_numbers(INPUT);
-        assert_eq!(22, find_gamma_rate(&input));
+        assert_eq!(22, calculate_gamma_rate(&input));
     }
     #[test]
-    fn test_find_epsilon_rate() {
+    fn test_calculate_life_support_rating() {
         let input = get_input::get_input_from_binary_as_numbers(INPUT);
-        assert_eq!(9, find_epsilon_rate(&input));
+        assert_eq!(230, calculate_life_support_rating(&input));
     }
     #[test]
     fn test_find_oxygen_generator_rating() {
