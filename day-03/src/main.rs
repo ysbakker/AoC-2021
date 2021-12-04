@@ -4,6 +4,10 @@ fn main() {
     println!(
         "Part 1: {}",
         find_gamma_rate(&input) * find_epsilon_rate(&input)
+    );
+    println!(
+        "Part 2: {}",
+        find_oxygen_generator_rating(&input) * find_co2_scrubber_rating(&input)
     )
 }
 
@@ -38,6 +42,62 @@ fn find_epsilon_rate(numbers: &[u32]) -> u32 {
 }
 
 fn find_oxygen_generator_rating(numbers: &[u32]) -> u32 {
+    let bits = get_max_bit_count(numbers);
+
+    let mut compare = 2u32.pow(bits - 1);
+    let mut current_numbers = numbers.to_vec();
+    for _ in 0..bits {
+        let mut numbers_with_one_in_current_index = Vec::<u32>::new();
+        let mut numbers_with_zero_in_current_index = Vec::<u32>::new();
+        for number in &current_numbers {
+            if number & compare > 0 {
+                numbers_with_one_in_current_index.push(*number)
+            } else {
+                numbers_with_zero_in_current_index.push(*number)
+            }
+        }
+
+        if numbers_with_one_in_current_index.len() >= numbers_with_zero_in_current_index.len() {
+            current_numbers = numbers_with_one_in_current_index
+        } else {
+            current_numbers = numbers_with_zero_in_current_index
+        }
+
+        if current_numbers.len() == 1 {
+            return current_numbers[0];
+        }
+        compare >>= 1;
+    }
+    0
+}
+
+fn find_co2_scrubber_rating(numbers: &[u32]) -> u32 {
+    let bits = get_max_bit_count(numbers);
+
+    let mut compare = 2u32.pow(bits - 1);
+    let mut current_numbers = numbers.to_vec();
+    for _ in 0..bits {
+        let mut numbers_with_one_in_current_index = Vec::<u32>::new();
+        let mut numbers_with_zero_in_current_index = Vec::<u32>::new();
+        for number in &current_numbers {
+            if number & compare > 0 {
+                numbers_with_one_in_current_index.push(*number)
+            } else {
+                numbers_with_zero_in_current_index.push(*number)
+            }
+        }
+
+        if numbers_with_one_in_current_index.len() < numbers_with_zero_in_current_index.len() {
+            current_numbers = numbers_with_one_in_current_index
+        } else {
+            current_numbers = numbers_with_zero_in_current_index
+        }
+
+        if current_numbers.len() == 1 {
+            return current_numbers[0];
+        }
+        compare >>= 1;
+    }
     0
 }
 
@@ -60,7 +120,6 @@ mod tests {
         let input = get_input::get_input_from_binary_as_numbers(INPUT);
         assert_eq!(198, find_epsilon_rate(&input) * find_gamma_rate(&input));
     }
-
     #[test]
     fn test_find_gamma_rate() {
         let input = get_input::get_input_from_binary_as_numbers(INPUT);
@@ -74,7 +133,12 @@ mod tests {
     #[test]
     fn test_find_oxygen_generator_rating() {
         let input = get_input::get_input_from_binary_as_numbers(INPUT);
-        assert_eq!(9, find_epsilon_rate(&input));
+        assert_eq!(23, find_oxygen_generator_rating(&input));
+    }
+    #[test]
+    fn test_find_co2_scrubber_rating() {
+        let input = get_input::get_input_from_binary_as_numbers(INPUT);
+        assert_eq!(10, find_co2_scrubber_rating(&input));
     }
     #[test]
     fn test_get_max_bit_count() {
