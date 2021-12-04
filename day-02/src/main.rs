@@ -83,18 +83,22 @@ fn parse_commands(commands: &[String]) -> Vec<(&str, u16)> {
     parsed
 }
 
-#[test]
-fn test_move_sub() {
-    const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/test"));
-    let input = get_input::get_input_as_strings(INPUT);
-    let commands = parse_commands(&input);
-    assert_eq!(150, move_sub_and_get_product(&commands))
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn test_move_sub_with_aim() {
     const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/test"));
-    let input = get_input::get_input_as_strings(INPUT);
-    let commands = parse_commands(&input);
-    assert_eq!(900, move_sub_and_get_product_with_aim(&commands))
+    #[test]
+    fn test_move_sub() {
+        let input = get_input::get_input_as_strings(INPUT);
+        let commands = parse_commands(&input);
+        assert_eq!(150, move_sub_and_get_product(&commands))
+    }
+
+    #[test]
+    fn test_move_sub_with_aim() {
+        let input = get_input::get_input_as_strings(INPUT);
+        let commands = parse_commands(&input);
+        assert_eq!(900, move_sub_and_get_product_with_aim(&commands))
+    }
 }

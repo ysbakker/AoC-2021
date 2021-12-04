@@ -5,9 +5,9 @@ fn main() {
     println!("Part 2: {}", get_sliding_window_increases(&data));
 }
 
-fn get_depth_increases(data: &[i16]) -> i16 {
-    let mut increases: i16 = 0;
-    let mut prev: i16 = data[0];
+fn get_depth_increases(data: &[i32]) -> i32 {
+    let mut increases: i32 = 0;
+    let mut prev: i32 = data[0];
 
     for val in data {
         if val > &prev {
@@ -19,9 +19,9 @@ fn get_depth_increases(data: &[i16]) -> i16 {
     increases
 }
 
-fn get_sliding_window_increases(data: &[i16]) -> i16 {
-    let mut increases: i16 = 0;
-    let mut prev: i16 = data[0] + data[1] + data[2];
+fn get_sliding_window_increases(data: &[i32]) -> i32 {
+    let mut increases: i32 = 0;
+    let mut prev: i32 = data[0] + data[1] + data[2];
 
     for (i, val) in data.iter().enumerate() {
         if i + 3 > data.len() {
@@ -37,16 +37,21 @@ fn get_sliding_window_increases(data: &[i16]) -> i16 {
     increases
 }
 
-#[test]
-fn test_depthincreases() {
-    const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/test"));
-    let data = get_input::get_input_as_numbers(INPUT);
-    assert_eq!(7, get_depth_increases(&data));
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn test_slidingwindowincreases() {
     const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/test"));
-    let data = get_input::get_input_as_numbers(INPUT);
-    assert_eq!(5, get_sliding_window_increases(&data));
+
+    #[test]
+    fn test_depthincreases() {
+        let data = get_input::get_input_as_numbers(INPUT);
+        assert_eq!(7, get_depth_increases(&data));
+    }
+
+    #[test]
+    fn test_slidingwindowincreases() {
+        let data = get_input::get_input_as_numbers(INPUT);
+        assert_eq!(5, get_sliding_window_increases(&data));
+    }
 }
