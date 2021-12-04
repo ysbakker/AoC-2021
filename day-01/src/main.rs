@@ -1,7 +1,8 @@
 use get_input;
 
 fn main() {
-    let data = get_input::get_input_as_numbers("./input/day-01/input");
+    const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/input"));
+    let data = get_input::get_input_as_numbers(INPUT);
     println!("Part 1: {}", get_depth_increases(&data));
     println!("Part 2: {}", get_sliding_window_increases(&data));
 }
@@ -40,12 +41,14 @@ fn get_sliding_window_increases(data: &Vec<i16>) -> i16 {
 
 #[test]
 fn test_depthincreases() {
-    let data = get_input::get_input_as_numbers("../input/day-01/test");
+    const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/test"));
+    let data = get_input::get_input_as_numbers(INPUT);
     assert_eq!(7, get_depth_increases(&data));
 }
 
 #[test]
 fn test_slidingwindowincreases() {
-    let data = get_input::get_input_as_numbers("../input/day-01/test");
+    const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/test"));
+    let data = get_input::get_input_as_numbers(INPUT);
     assert_eq!(5, get_sliding_window_increases(&data));
 }

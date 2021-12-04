@@ -1,7 +1,8 @@
 use get_input;
 
 fn main() {
-    let input = get_input::get_input_as_strings("./input/day-02/input");
+    const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/input"));
+    let input = get_input::get_input_as_strings(INPUT);
     let commands = parse_commands(&input);
     println!("Part 1: {}", move_sub_and_get_product(&commands));
     println!("Part 2: {}", move_sub_and_get_product_with_aim(&commands));
@@ -86,14 +87,16 @@ fn parse_commands(commands: &Vec<String>) -> Vec<(&str, u16)> {
 
 #[test]
 fn test_move_sub() {
-    let input = get_input::get_input_as_strings("../input/day-02/test");
+    const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/test"));
+    let input = get_input::get_input_as_strings(INPUT);
     let commands = parse_commands(&input);
     assert_eq!(150, move_sub_and_get_product(&commands))
 }
 
 #[test]
 fn test_move_sub_with_aim() {
-    let input = get_input::get_input_as_strings("../input/day-02/test");
+    const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/test"));
+    let input = get_input::get_input_as_strings(INPUT);
     let commands = parse_commands(&input);
     assert_eq!(900, move_sub_and_get_product_with_aim(&commands))
 }
