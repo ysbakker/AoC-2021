@@ -40,12 +40,12 @@ fn get_sliding_window_increases(data: &Vec<i16>) -> i16 {
 
 #[test]
 fn test_depthincreases() {
-    let data = get_input::get_input_as_numbers("./input/day-01/test");
+    let data = get_input::get_input_as_numbers("../input/day-01/test");
     assert_eq!(7, get_depth_increases(&data));
 }
 
 #[test]
 fn test_slidingwindowincreases() {
-    let data = get_input::get_input_as_numbers("./input/day-01/test");
+    let data = get_input::get_input_as_numbers("../input/day-01/test");
     assert_eq!(5, get_sliding_window_increases(&data));
 }

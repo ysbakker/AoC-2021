@@ -3,4 +3,5 @@
 members = [
     "get_input",
     "day-01",
+    "day-02",
 ]
