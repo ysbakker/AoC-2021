@@ -9,3 +9,4 @@ These are the direct links to my solutions:
 - [Day 1](day-01/src/main.rs)
 - [Day 2](day-02/src/main.rs)
 - [Day 3](day-03/src/main.rs)
+- [Day 4](day-04/src/main.rs)
