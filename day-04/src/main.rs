@@ -3,10 +3,14 @@ use std::collections::HashSet;
 fn main() {
     const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/input"));
     let input = get_input::get_input_as_strings(INPUT);
-    let (numbers, mut bingo_cards) = get_bingo_input(&input);
+    let (numbers, bingo_cards) = get_bingo_input(&input);
     println!(
         "Part 1: {}",
-        mark_bingo_cards_and_calculate_winner(&numbers, &mut bingo_cards)
+        mark_bingo_cards_and_calculate_winner(&numbers, &bingo_cards)
+    );
+    println!(
+        "Part 2: {}",
+        mark_bingo_cards_and_calculate_loser(&numbers, &bingo_cards)
     );
 }
 
@@ -50,13 +54,37 @@ fn get_bingo_input(lines: &[String]) -> (Vec<u32>, Vec<Vec<HashSet<u32>>>) {
     (numbers, bingo_cards)
 }
 
-fn mark_bingo_cards_and_calculate_winner(numbers: &[u32], cards: &mut [Vec<HashSet<u32>>]) -> u32 {
+fn mark_bingo_cards_and_calculate_winner(
+    numbers: &[u32],
+    initial_cards: &[Vec<HashSet<u32>>],
+) -> u32 {
+    let mut cards = initial_cards.to_owned();
     for number in numbers {
-        mark_bingo_cards(*number, cards);
-        let winner = calculate_winner_score(cards, *number);
+        mark_bingo_cards(*number, &mut cards);
+        let winner = calculate_winner_score(&cards, *number);
         if winner > 0 {
             return winner;
         }
+    }
+    0
+}
+
+fn mark_bingo_cards_and_calculate_loser(
+    numbers: &[u32],
+    initial_cards: &[Vec<HashSet<u32>>],
+) -> u32 {
+    let mut cards = initial_cards.to_owned();
+    for number in numbers {
+        if cards.len() == 1 {
+            mark_bingo_cards(*number, &mut cards);
+            let winner = calculate_winner_score(&cards, *number);
+            if winner > 0 {
+                return winner;
+            }
+            continue;
+        }
+        mark_bingo_cards(*number, &mut cards);
+        cards = remove_winning_cards(&mut cards);
     }
     0
 }
@@ -69,9 +97,9 @@ fn mark_bingo_cards(number: u32, cards: &mut [Vec<HashSet<u32>>]) {
     }
 }
 
-fn calculate_winner_score(cards: &mut [Vec<HashSet<u32>>], number: u32) -> u32 {
+fn calculate_winner_score(cards: &[Vec<HashSet<u32>>], number: u32) -> u32 {
     for card in cards {
-        for numbers in card.clone() {
+        for numbers in card {
             if numbers.is_empty() {
                 let mut sum = 0;
                 for nums in card.iter().skip(5) {
@@ -82,6 +110,24 @@ fn calculate_winner_score(cards: &mut [Vec<HashSet<u32>>], number: u32) -> u32 {
         }
     }
     0
+}
+
+fn remove_winning_cards(cards: &mut [Vec<HashSet<u32>>]) -> Vec<Vec<HashSet<u32>>> {
+    let mut remaining_cards: Vec<Vec<HashSet<u32>>> = Vec::new();
+    let mut loser: bool;
+    for card in cards {
+        loser = true;
+        for numbers in card.clone() {
+            if numbers.is_empty() {
+                loser = false;
+                break;
+            }
+        }
+        if loser {
+            remaining_cards.push(card.to_vec());
+        }
+    }
+    remaining_cards
 }
 
 #[cfg(test)]
@@ -99,10 +145,20 @@ mod tests {
     fn test_mark_bingo_cards_and_calculate_winner() {
         const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/test"));
         let input = get_input::get_input_as_strings(INPUT);
-        let (numbers, mut bingo_cards) = get_bingo_input(&input);
+        let (numbers, bingo_cards) = get_bingo_input(&input);
         assert_eq!(
             4512,
-            mark_bingo_cards_and_calculate_winner(&numbers, &mut bingo_cards)
+            mark_bingo_cards_and_calculate_winner(&numbers, &bingo_cards)
+        );
+    }
+    #[test]
+    fn test_mark_bingo_cards_and_calculate_loser() {
+        const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/test"));
+        let input = get_input::get_input_as_strings(INPUT);
+        let (numbers, bingo_cards) = get_bingo_input(&input);
+        assert_eq!(
+            1924,
+            mark_bingo_cards_and_calculate_loser(&numbers, &bingo_cards)
         );
     }
 }
