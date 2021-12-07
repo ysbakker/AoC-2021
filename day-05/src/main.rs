@@ -41,10 +41,8 @@ fn map_segment_to_points(
 ) -> Option<Vec<(i32, i32)>> {
     let mut points: Vec<(i32, i32)> = Vec::new();
 
-    let (p1x, p1y) = point1;
-    let (p2x, p2y) = point2;
-    let dx = p2x - p1x;
-    let dy = p2y - p1y;
+    let ((p1x, p1y), (p2x, p2y)) = (point1, point2);
+    let (dx, dy) = (p2x - p1x, p2y - p1y);
 
     if ignore_diagonal && dx != 0 && dy != 0 {
         return None;
