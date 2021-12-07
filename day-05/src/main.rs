@@ -23,8 +23,8 @@ fn calculate_segments_overlap(segments: &[String], ignore_diagonal: bool) -> usi
         );
         if segment_points.is_some() {
             for point in segment_points.unwrap() {
-                let exists = points.insert(point);
-                if !exists && !overlapping.contains(&point) {
+                let did_insert = points.insert(point);
+                if !did_insert && !overlapping.contains(&point) {
                     overlapping.insert(point);
                 }
             }
