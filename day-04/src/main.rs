@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 
 fn main() {
+    let now = std::time::Instant::now();
     const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/input"));
     let input = get_input::get_input_as_strings(INPUT);
     let (numbers, bingo_cards) = get_bingo_input(&input);
@@ -12,6 +13,7 @@ fn main() {
         "Part 2: {}",
         mark_bingo_cards_and_calculate_loser(&numbers, &bingo_cards)
     );
+    println!("Elapsed: {}ms", now.elapsed().as_millis()); // 90ms
 }
 
 /// Returns `(numbers, Vec<Vec<HashSet<u32>>>)`

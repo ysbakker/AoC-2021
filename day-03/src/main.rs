@@ -1,8 +1,10 @@
 fn main() {
+    let now = std::time::Instant::now();
     const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/input"));
     let input = get_input::get_input_from_binary_as_numbers(INPUT);
     println!("Part 1: {}", calculate_power_consumption(&input));
-    println!("Part 2: {}", calculate_life_support_rating(&input))
+    println!("Part 2: {}", calculate_life_support_rating(&input));
+    println!("Elapsed: {}ms", now.elapsed().as_millis()); // 2ms
 }
 
 fn calculate_power_consumption(numbers: &[u32]) -> u32 {

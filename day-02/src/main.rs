@@ -1,9 +1,11 @@
 fn main() {
+    let now = std::time::Instant::now();
     const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/input"));
     let input = get_input::get_input_as_strings(INPUT);
     let commands = parse_commands(&input);
     println!("Part 1: {}", move_sub_and_get_product(&commands));
     println!("Part 2: {}", move_sub_and_get_product_with_aim(&commands));
+    println!("Elapsed: {}ms", now.elapsed().as_millis()); // 1ms
 }
 
 /**

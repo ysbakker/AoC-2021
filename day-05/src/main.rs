@@ -1,11 +1,12 @@
 use std::collections::HashSet;
 
 fn main() {
+    let now = std::time::Instant::now();
     const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/input"));
-
     let lines = get_input::get_input_as_strings(INPUT);
     println!("Part 1: {}", calculate_segments_overlap(&lines, true));
     println!("Part 2: {}", calculate_segments_overlap(&lines, false));
+    println!("Elapsed: {}ms", now.elapsed().as_millis()); // ~320ms
 }
 
 fn calculate_segments_overlap(segments: &[String], ignore_diagonal: bool) -> usize {
