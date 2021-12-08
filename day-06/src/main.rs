@@ -1,4 +1,5 @@
 fn main() {
+    let now = std::time::Instant::now();
     const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/input"));
     let fish: Vec<usize> = INPUT
         .split(',')
@@ -6,6 +7,7 @@ fn main() {
         .collect();
     println!("Part 1: {}", simulate_and_get_amount(&fish, 80));
     println!("Part 1: {}", simulate_and_get_amount(&fish, 256));
+    println!("Elapsed: {}ms", now.elapsed().as_millis()); // <1ms
 }
 
 fn simulate_and_get_amount(fish: &[usize], iterations: u32) -> usize {
