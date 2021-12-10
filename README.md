@@ -12,3 +12,4 @@ These are the direct links to my solutions:
 - [Day 4](day-04/src/main.rs)
 - [Day 5](day-05/src/main.rs)
 - [Day 6](day-06/src/main.rs)
+- [Day 7](day-07/src/main.rs)
