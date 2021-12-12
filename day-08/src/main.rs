@@ -23,7 +23,7 @@ fn count_easy_digits(input: &[String]) -> u32 {
     let parsed = parse_input(input);
     let mut count = 0;
 
-    for (pattern, output_values) in parsed {
+    for (_pattern, output_values) in parsed {
         for number in output_values {
             if [2, 3, 4, 7].contains(&number.len()) {
                 count += 1
