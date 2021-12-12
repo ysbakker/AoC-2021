@@ -1,10 +1,13 @@
 use std::collections::HashMap;
 
 fn main() {
+    let now = std::time::Instant::now();
+
     const INPUT: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/input"));
     let input = get_input::get_input_as_strings(INPUT);
     println!("Part 1: {}", count_easy_digits(&input));
     println!("Part 2: {}", calculate_output_value_sum(&input));
+    println!("Elapsed: {}ms", now.elapsed().as_millis()); // 24ms
 }
 
 /// Returns Vec<(signal_patterns, output_digits)>
