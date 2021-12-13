@@ -6,7 +6,7 @@ fn main() {
     let lines = get_input::get_input_as_strings(INPUT);
     println!("Part 1: {}", calculate_syntax_error_score(&lines));
     println!("Part 2: {}", calculate_autocomplete_score(&lines));
-    println!("Elapsed: {}ms", now.elapsed().as_millis()); // 1ms
+    println!("Elapsed: {}ms", now.elapsed().as_millis()); // 3ms
 }
 
 fn calculate_syntax_error_score(lines: &[String]) -> u32 {
