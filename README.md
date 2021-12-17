@@ -16,3 +16,4 @@ These are the direct links to my solutions:
 - [Day 8](day-08/src/main.rs)
 - [Day 9](day-09/src/main.rs)
 - [Day 10](day-10/src/main.rs)
+- [Day 11](day-11/src/main.rs)
